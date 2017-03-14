@@ -35,27 +35,27 @@ def menu_loop():
         print("Enter 'q' to quit.")
         for key, value in menu.items():
             print('{}) {}'.format(key, value.__doc__))
-            choice = input('Action: ').lower().strip()
+        choice = raw_input('Action: ').lower().strip()
 
-            if choice in menu:
-                clear()
-                menu[choice]()
+        if choice in menu:
+            clear()
+            menu[choice]()
 
 
 def add_entry():
     """Add an entry"""
     print("Enter your entry. Press ctrl+d when finished.")
-    date = sys.stdin.read().strip()
+    data = sys.stdin.read().strip()
 
     if data:
-        if input('Save entry? y/n ').lower() != 'n':
+        if raw_input('Save entry? y/n ').lower() != 'n':
             Entry.create(content=data)
             print("Saved!")
 
 
-def view_entries():
+def view_entries(search_query=None):
     """View previous entries"""
-    entries - Entry.select().order_by(Entry.timestamp.desc())
+    entries = Entry.select().order_by(Entry.timestamp.desc())
     if search_query:
         entries = entries.where(Entry.content.contains(search_query))
 
@@ -66,6 +66,7 @@ def view_entries():
         print(entry.context)
         print('\n\n'+'='*len(timestamp))
         print('n) next entry')
+        print('d) delete entry')
         print('q) return to main menu')
 
         next_action = input('Action: [Nq] ').lower().strip()
@@ -89,7 +90,8 @@ def search_entries():
 menu = OrderedDict([
     ('a', add_entry),
     ('v', view_entries),
-    ('s', search_entries),
+    ('d', delete_entry),
+    ('s', search_entries)
 ])
 
 if __name__ == '__main__':
